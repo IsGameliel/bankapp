@@ -20,6 +20,11 @@ const eslintConfig = [
   },
 
   // Overrides for generated files only
+
+  {
+    ignores: ["src/generated/**"], // 🚀 completely skip these files
+  },
+
   {
     files: ["src/generated/**"],
     rules: {
