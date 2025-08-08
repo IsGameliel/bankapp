@@ -11,21 +11,24 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState('');
   const [userId, setUserId] = useState('');
+  const [redirectPath, setRedirectPath] = useState<string | null>(null);
   const router = useRouter();
-  
+
+  // Simulate initial page load
   useEffect(() => {
-      // Simulate loading delay
-      const timer = setTimeout(() => setLoading(false), 1500);
+    const timer = setTimeout(() => setLoading(false), 1500);
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Redirect after OTP verification
+  useEffect(() => {
+    if (message === 'Login successful! Redirecting...' && redirectPath) {
+      const timer = setTimeout(() => {
+        router.push(redirectPath);
+      }, 1200);
       return () => clearTimeout(timer);
-    }, []);
-  
-    if (loading) {
-      return (
-        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-600 to-indigo-700 text-white">
-          <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-white border-opacity-50"></div>
-        </div>
-      );
     }
+  }, [message, redirectPath, router]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -45,7 +48,7 @@ export default function LoginPage() {
       setMessage(data.error || 'Login failed');
     } else {
       setMessage('OTP sent to your email');
-      setUserId(data.userId); // Store userId to verify OTP later
+      setUserId(data.userId);
       setStep('otp');
     }
   };
@@ -68,19 +71,17 @@ export default function LoginPage() {
       setMessage(data.error || 'Invalid OTP');
     } else {
       setMessage('Login successful! Redirecting...');
-      const role = data.role?.toUpperCase();
-      const redirectPath = data.role === 'ADMIN' ? '/dashboard/admin' : '/dashboard/customer';
-      console.log('OTP verified. Redirecting to:', redirectPath);
-      router.push(redirectPath);
-      // TODO: Save token/session and redirect user
+      const path = data.role === 'ADMIN' ? '/dashboard/admin' : '/dashboard/customer';
+      setRedirectPath(path);
     }
   };
 
   return (
-    <main className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
+    <main className="relative min-h-screen flex items-center justify-center bg-gray-100 px-4">
+      {/* Form */}
       <form
         onSubmit={step === 'credentials' ? handleLogin : handleOtpVerify}
-        className="bg-white p-8 rounded-lg shadow max-w-md w-full"
+        className="bg-white p-8 rounded-lg shadow max-w-md w-full relative z-10"
       >
         <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
 
@@ -118,7 +119,13 @@ export default function LoginPage() {
         )}
 
         {message && (
-          <p className="text-center text-sm text-red-500 mb-4">{message}</p>
+          <p
+            className={`text-center text-sm mb-4 ${
+              message.includes('successful') ? 'text-green-500' : 'text-red-500'
+            }`}
+          >
+            {message}
+          </p>
         )}
 
         <button
@@ -135,6 +142,13 @@ export default function LoginPage() {
             : 'Submit OTP'}
         </button>
       </form>
+
+      {/* Loading Overlay */}
+      {loading && (
+        <div className="absolute inset-0 bg-white bg-opacity-80 flex items-center justify-center z-20">
+          <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-600"></div>
+        </div>
+      )}
     </main>
   );
 }

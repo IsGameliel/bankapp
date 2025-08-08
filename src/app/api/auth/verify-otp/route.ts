@@ -1,6 +1,7 @@
 // /src/app/api/auth/verify-otp/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import jwt from 'jsonwebtoken';
 
 export async function POST(req: NextRequest) {
   try {
@@ -24,19 +25,43 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Optional: Expire the OTP once used
+    // Expire the OTP once used
     await prisma.user.update({
       where: { email },
       data: { otp: null },
     });
+
     console.log('Verifying OTP for:', email, otp);
 
-    return NextResponse.json({ success: true, message: 'OTP verified.', role: user.role});
+    // ✅ Create JWT token
+    const token = jwt.sign(
+      { id: user.id, email: user.email, role: user.role },
+      process.env.JWT_SECRET!,
+      { expiresIn: '1h' }
+    );
+
+    // ✅ Set token in HTTP-only cookie
+    const response = NextResponse.json({
+      success: true,
+      message: 'OTP verified.',
+      role: user.role
+    });
+
+    response.cookies.set('token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAge: 60 * 60, // 1 hour
+      path: '/',
+    });
+
+    return response;
+
   } catch (error) {
     console.error('[OTP VERIFY ERROR]', error);
     return NextResponse.json(
       { success: false, message: 'Internal Server Error' },
       { status: 500 }
     );
-  } 
+  }
 }
