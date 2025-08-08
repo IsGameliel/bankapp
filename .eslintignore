@@ -1,0 +1,3 @@
+# Ignore generated Prisma files from linting
+src/generated/prisma/wasm.js
+src/generated/prisma/*.js
