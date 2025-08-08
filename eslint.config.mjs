@@ -11,11 +11,21 @@ const compat = new FlatCompat({
 
 const eslintConfig = [
   ...compat.extends("next/core-web-vitals", "next/typescript"),
+
+  // Global rules (apply to your code)
   {
     rules: {
-      '@typescript-eslint/no-this-alias': 'off',
-      '@typescript-eslint/no-explicit-any': 'off',
-      '@typescript-eslint/no-require-imports': 'off',
+      "@typescript-eslint/no-explicit-any": "off", // Still off globally if you want
+    },
+  },
+
+  // Overrides for generated files only
+  {
+    files: ["src/generated/**"],
+    rules: {
+      "@typescript-eslint/no-this-alias": "off",
+      "@typescript-eslint/no-require-imports": "off",
+      "@typescript-eslint/no-unused-expressions": "off",
     },
   },
 ];
