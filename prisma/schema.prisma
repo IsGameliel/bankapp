@@ -15,16 +15,26 @@ datasource db {
 }
 
 model User {
-  id         String   @id @default(uuid())
-  email      String   @unique
-  password   String
-  role       Role     @default(CUSTOMER)
-  otp        String? 
-  otpExpires DateTime?
-  createdAt  DateTime @default(now())
+  id            String   @id @default(uuid())
+  email         String   @unique
+  password      String
+  name          String?
+  accountNumber String? @unique
+  accountType   AccountType? @default(SAVINGS)
+  role          Role     @default(CUSTOMER)
+  otp           String? 
+  otpExpires    DateTime?
+  profilePicture String?
+  createdAt     DateTime @default(now())
 }
 
 enum Role {
   ADMIN
   CUSTOMER
+}
+enum AccountType {
+  SAVINGS
+  FIXED
+  SALARY
+  DEMAT
 }
