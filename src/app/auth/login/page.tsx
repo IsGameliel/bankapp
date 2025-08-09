@@ -70,6 +70,10 @@ export default function LoginPage() {
     if (!res.ok) {
       setMessage(data.error || 'Invalid OTP');
     } else {
+      if (data.token) {
+      localStorage.setItem('token', data.token);
+      }
+      
       setMessage('Login successful! Redirecting...');
       const path = data.role === 'ADMIN' ? '/dashboard/admin' : '/dashboard/customer';
       setRedirectPath(path);

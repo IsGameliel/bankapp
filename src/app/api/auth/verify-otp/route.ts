@@ -44,7 +44,8 @@ export async function POST(req: NextRequest) {
     const response = NextResponse.json({
       success: true,
       message: 'OTP verified.',
-      role: user.role
+      role: user.role,
+      token,
     });
 
     response.cookies.set('token', token, {
