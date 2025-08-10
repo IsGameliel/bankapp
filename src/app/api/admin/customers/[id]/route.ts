@@ -3,10 +3,10 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { requireAdmin } from '@/lib/verifyAdmin';
 
-export async function PATCH(req: NextRequest, { params }: { params: { id: string } }) {
+export async function PATCH(req: NextRequest) {
   try {
     await requireAdmin(req);
-    const id = params.id;
+    const id = req.nextUrl.pathname.split('/').pop();
     const { status, accountType, balance, name, email } = await req.json();
 
     const updated = await prisma.user.update({
