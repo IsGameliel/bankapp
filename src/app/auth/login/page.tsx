@@ -2,6 +2,8 @@
 
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
+import { Mail, Lock, KeyRound, ArrowRight } from 'lucide-react';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -14,18 +16,14 @@ export default function LoginPage() {
   const [redirectPath, setRedirectPath] = useState<string | null>(null);
   const router = useRouter();
 
-  // Simulate initial page load
   useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 1500);
+    const timer = setTimeout(() => setLoading(false), 1200);
     return () => clearTimeout(timer);
   }, []);
 
-  // Redirect after OTP verification
   useEffect(() => {
     if (message === 'Login successful! Redirecting...' && redirectPath) {
-      const timer = setTimeout(() => {
-        router.push(redirectPath);
-      }, 1200);
+      const timer = setTimeout(() => router.push(redirectPath), 1200);
       return () => clearTimeout(timer);
     }
   }, [message, redirectPath, router]);
@@ -71,9 +69,8 @@ export default function LoginPage() {
       setMessage(data.error || 'Invalid OTP');
     } else {
       if (data.token) {
-      localStorage.setItem('token', data.token);
+        localStorage.setItem('token', data.token);
       }
-      
       setMessage('Login successful! Redirecting...');
       const path = data.role === 'ADMIN' ? '/dashboard/admin' : '/dashboard/customer';
       setRedirectPath(path);
@@ -81,45 +78,71 @@ export default function LoginPage() {
   };
 
   return (
-    <main className="relative min-h-screen flex items-center justify-center bg-gray-100 px-4">
-      {/* Form */}
+    <main className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-600 via-indigo-700 to-purple-800 px-4">
+      {/* Form Container */}
       <form
         onSubmit={step === 'credentials' ? handleLogin : handleOtpVerify}
-        className="bg-white p-8 rounded-lg shadow max-w-md w-full relative z-10"
+        className="bg-white p-8 rounded-2xl shadow-lg max-w-md w-full relative z-10"
       >
-        <h2 className="text-2xl font-bold mb-6 text-center text-[#0D1B2A]">Login</h2>
+        {/* Step Indicator */}
+        <div className="flex justify-center mb-4">
+          <span className={`px-3 py-1 text-sm rounded-full ${step === 'credentials' ? 'bg-blue-100 text-blue-600' : 'bg-gray-200 text-gray-500'}`}>
+            Step 1: Login
+          </span>
+          <span className={`px-3 py-1 text-sm rounded-full ml-2 ${step === 'otp' ? 'bg-green-100 text-green-600' : 'bg-gray-200 text-gray-500'}`}>
+            Step 2: OTP
+          </span>
+        </div>
+
+        <h2 className="text-2xl font-bold mb-6 text-center text-[#0D1B2A]">Welcome Back</h2>
 
         {step === 'credentials' && (
           <>
-            <input
-              type="email"
-              placeholder="Email"
-              className="w-full p-3 border rounded mb-4 text-[#0D1B2A]"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
+            <div className="flex items-center border rounded mb-4 px-3">
+              <Mail className="text-gray-400 mr-2" size={20} />
+              <input
+                type="email"
+                placeholder="Email address"
+                className="w-full p-3 outline-none"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+            </div>
 
-            <input
-              type="password"
-              placeholder="Password"
-              className="w-full p-3 border rounded mb-4 text-[#0D1B2A]"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
+            <div className="flex items-center border rounded mb-4 px-3">
+              <Lock className="text-gray-400 mr-2" size={20} />
+              <input
+                type="password"
+                placeholder="Password"
+                className="w-full p-3 outline-none"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+            </div>
+
+            {/* Forgot Password */}
+            <div className="flex justify-end mb-4">
+              <Link href="/auth/forgot-password" className="text-blue-600 text-sm hover:underline">
+                Forgot password?
+              </Link>
+            </div>
           </>
         )}
 
         {step === 'otp' && (
-          <input
-            type="text"
-            placeholder="Enter OTP"
-            className="w-full p-3 border rounded mb-4"
-            value={otp}
-            onChange={(e) => setOtp(e.target.value)}
-            required
-          />
+          <div className="flex items-center border rounded mb-4 px-3">
+            <KeyRound className="text-gray-400 mr-2" size={20} />
+            <input
+              type="text"
+              placeholder="Enter OTP"
+              className="w-full p-3 outline-none"
+              value={otp}
+              onChange={(e) => setOtp(e.target.value)}
+              required
+            />
+          </div>
         )}
 
         {message && (
@@ -135,16 +158,26 @@ export default function LoginPage() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-[#0D1B2A] text-white py-3 rounded hover:bg-blue-700 transition"
+          className="w-full bg-blue-600 text-white py-3 rounded-lg flex items-center justify-center gap-2 font-semibold hover:bg-blue-700 transition"
         >
           {loading
             ? step === 'credentials'
               ? 'Verifying...'
               : 'Verifying OTP...'
             : step === 'credentials'
-            ? 'Login'
-            : 'Submit OTP'}
+            ? <>Login <ArrowRight size={18} /></>
+            : <>Submit OTP <ArrowRight size={18} /></>}
         </button>
+
+        {/* Sign Up Link */}
+        {step === 'credentials' && (
+          <p className="text-center text-sm text-gray-600 mt-4">
+            Don’t have an account?{' '}
+            <Link href="/auth/register" className="text-blue-600 hover:underline">
+              Create one
+            </Link>
+          </p>
+        )}
       </form>
 
       {/* Loading Overlay */}
