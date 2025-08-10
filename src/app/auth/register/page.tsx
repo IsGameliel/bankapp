@@ -52,12 +52,12 @@ export default function RegisterPage() {
         onSubmit={handleRegister}
         className="bg-white p-8 rounded-lg shadow max-w-md w-full"
       >
-        <h2 className="text-2xl font-bold mb-6 text-center">Register</h2>
+        <h2 className="text-2xl font-bold mb-6 text-center text-[#0D1B2A]">Register</h2>
 
         <input
           type="email"
           placeholder="Email"
-          className="w-full p-3 border rounded mb-4"
+          className="w-full p-3 border rounded mb-4 text-[#0D1B2A]"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
@@ -66,7 +66,7 @@ export default function RegisterPage() {
         <input
           type="password"
           placeholder="Password"
-          className="w-full p-3 border rounded mb-4"
+          className="w-full p-3 border rounded mb-4 text-[#0D1B2A]"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
@@ -77,7 +77,7 @@ export default function RegisterPage() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-blue-600 text-white py-3 rounded hover:bg-blue-700 transition"
+          className="w-full bg-[#0D1B2A] text-white py-3 rounded hover:bg-blue-700 transition"
         >
           {loading ? 'Registering...' : 'Register'}
         </button>

@@ -87,14 +87,14 @@ export default function LoginPage() {
         onSubmit={step === 'credentials' ? handleLogin : handleOtpVerify}
         className="bg-white p-8 rounded-lg shadow max-w-md w-full relative z-10"
       >
-        <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
+        <h2 className="text-2xl font-bold mb-6 text-center text-[#0D1B2A]">Login</h2>
 
         {step === 'credentials' && (
           <>
             <input
               type="email"
               placeholder="Email"
-              className="w-full p-3 border rounded mb-4"
+              className="w-full p-3 border rounded mb-4 text-[#0D1B2A]"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
@@ -103,7 +103,7 @@ export default function LoginPage() {
             <input
               type="password"
               placeholder="Password"
-              className="w-full p-3 border rounded mb-4"
+              className="w-full p-3 border rounded mb-4 text-[#0D1B2A]"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
@@ -135,7 +135,7 @@ export default function LoginPage() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-blue-600 text-white py-3 rounded hover:bg-blue-700 transition"
+          className="w-full bg-[#0D1B2A] text-white py-3 rounded hover:bg-blue-700 transition"
         >
           {loading
             ? step === 'credentials'

@@ -15,26 +15,79 @@ datasource db {
 }
 
 model User {
-  id            String   @id @default(uuid())
-  email         String   @unique
-  password      String
-  name          String?
-  accountNumber String? @unique
-  accountType   AccountType? @default(SAVINGS)
-  role          Role     @default(CUSTOMER)
-  otp           String? 
-  otpExpires    DateTime?
+  id             String       @id @default(uuid())
+  email          String       @unique
+  password       String
+  name           String?
+  accountNumber  String?      @unique
+  accountType    AccountType? @default(SAVINGS)
+  role           Role         @default(CUSTOMER)
+  otp            String?
+  otpExpires     DateTime?
   profilePicture String?
-  createdAt     DateTime @default(now())
+  balance        Float        @default(0.0)
+  status         UserStatus   @default(ACTIVE)
+  createdAt      DateTime     @default(now())
+
+  transactions   Transaction[]
+  loans          Loan[]
+}
+
+model Transaction {
+  id          String       @id @default(uuid())
+  amount      Float
+  type        TransactionType
+  description String?
+  status TransactionStatus @default(PENDING)
+  createdAt   DateTime     @default(now())
+
+  user        User         @relation(fields: [userId], references: [id])
+  userId      String
+}
+
+model Loan {
+  id          String     @id @default(uuid())
+  amount      Float
+  status      LoanStatus @default(PENDING)
+  createdAt   DateTime   @default(now())
+
+  user        User       @relation(fields: [userId], references: [id])
+  userId      String
 }
 
 enum Role {
   ADMIN
   CUSTOMER
 }
+
 enum AccountType {
   SAVINGS
   FIXED
   SALARY
   DEMAT
+}
+
+enum TransactionType {
+  DEPOSIT
+  WITHDRAWAL
+  TRANSFER
+}
+
+enum LoanStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  PAID
+}
+
+enum UserStatus {
+  ACTIVE
+  SUSPENDED
+  CLOSED
+}
+
+enum TransactionStatus {
+  PENDING
+  SUCCESS
+  FAILED
 }

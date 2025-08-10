@@ -13,7 +13,7 @@ export async function GET(req: NextRequest) {
     const decoded = jwt.verify(token, process.env.JWT_SECRET!) as { id: string };
     const user = await prisma.user.findUnique({
       where: { id: decoded.id },
-      select: { name: true, email: true, role: true, accountNumber: true, accountType: true }
+      select: { name: true, email: true, role: true, accountNumber: true, accountType: true, balance: true }
     });
 
     if (!user) {

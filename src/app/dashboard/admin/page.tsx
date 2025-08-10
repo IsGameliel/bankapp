@@ -1,9 +1,10 @@
-export default function AdminDashboard() {
+// /src/app/dashboard/admin/page.tsx
+'use client';
+export default function AdminIndex() {
   return (
-    <div className="p-8">
-      <h1 className="text-3xl font-bold mb-4">Admin Dashboard</h1>
-      <p>Here, you can credit users, view all customers, and monitor transactions.</p>
-      {/* Add components like credit form, transaction table etc. */}
+    <div>
+      <h1 className="text-3xl font-bold mb-4 text-[#0D1B2A]">Admin Dashboard</h1>
+      <p className="text-[#0D1B2A]">Welcome. Use the sidebar to manage users, loans and transactions.</p>
     </div>
   );
 }
