@@ -13,7 +13,7 @@ export async function requireAdmin(req: NextRequest) {
     if (payload.role !== 'ADMIN') throw new Error('Not admin');
     // return payload for further use (id, email, role)
     return payload as { id?: string; email?: string; role?: string; [k: string]: any };
-  } catch (err) {
+  } catch (_err) {
     throw new Error('Invalid token or not admin');
   }
 }

@@ -30,10 +30,10 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
   }
 }
 
-export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
+export async function DELETE(req: NextRequest) {
   try {
     await requireAdmin(req);
-    const id = params.id;
+    const id = req.nextUrl.pathname.split('/').pop();
 
     // Optional: cascade delete related transactions & loans (be careful)
     await prisma.transaction.deleteMany({ where: { userId: id } });
