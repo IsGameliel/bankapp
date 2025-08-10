@@ -3,15 +3,16 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { requireAdmin } from '@/lib/verifyAdmin';
 
-export async function PATCH(req: NextRequest, { params }: { params: { id: string } }) {
+export async function PATCH(req: NextRequest) {
   try {
     await requireAdmin(req);
+    const id = req.nextUrl.pathname.split('/').pop();
     const { status } = await req.json();
     let updated;
     if (status === 'APPROVED') {
       // First, approve the loan
       updated = await prisma.loan.update({
-        where: { id: params.id },
+        where: { id },
         data: { status: 'APPROVED' },
         include: { user: true },
       });
@@ -32,14 +33,14 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
       });
       // Set status to SUCCESS
       updated = await prisma.loan.update({
-        where: { id: params.id },
+        where: { id },
         data: { status: 'PAID' },
         include: { user: true },
       });
     } else {
       // For other statuses (e.g., REJECTED), just update as requested
       updated = await prisma.loan.update({
-        where: { id: params.id },
+        where: { id },
         data: { status },
         include: { user: true },
       });
