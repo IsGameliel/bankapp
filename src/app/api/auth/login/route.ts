@@ -8,19 +8,26 @@ import { generateOtp } from '@/lib/utils'; // Utility function to generate OTP
 
 export async function POST(req: Request) {
   try {
-    const { email, password } = await req.json();
+  const { email, password } = await req.json();
+  console.log('Login attempt:', { email, password });
 
     if (!email || !password) {
       return NextResponse.json({ error: 'Email and password required' }, { status: 400 });
     }
 
-    const user = await prisma.user.findUnique({ where: { email } });
+  const user = await prisma.user.findUnique({ where: { email } });
+  console.log('User from DB:', user);
 
     if (!user) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
     const validPassword = await bcrypt.compare(password, user.password);
+    console.log('Password check:', {
+      providedPassword: password,
+      storedHash: user.password,
+      validPassword
+    });
     if (!validPassword) {
       return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 });
     }
