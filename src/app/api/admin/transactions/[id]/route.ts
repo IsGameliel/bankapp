@@ -4,11 +4,12 @@ import jwt from 'jsonwebtoken';
 
 import { requireAdmin } from '@/lib/verifyAdmin';
 // GET /api/admin/transactions/[id] - fetch transactions for a user (admin only)
-export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(req: NextRequest) {
   try {
     await requireAdmin(req);
+    const id = req.nextUrl.pathname.split('/').pop();
     const txs = await prisma.transaction.findMany({
-      where: { userId: params.id },
+      where: { userId: id },
       orderBy: { createdAt: 'desc' },
     });
     return NextResponse.json({ success: true, transactions: txs });
@@ -18,8 +19,9 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
   }
 }
 
-export async function PATCH(req: NextRequest, { params }: { params: { id: string } }) {
+export async function PATCH(req: NextRequest) {
   try {
+    const id = req.nextUrl.pathname.split('/').pop();
     const token = req.cookies.get('token')?.value;
     if (!token) {
       return NextResponse.json({ success: false, message: 'No token found' }, { status: 401 });
@@ -35,7 +37,7 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
     }
     // Update transaction status
     const updated = await prisma.transaction.update({
-      where: { id: params.id },
+      where: { id },
       data: { status },
     });
     // If marking as SUCCESS and type is DEPOSIT, increment user balance
