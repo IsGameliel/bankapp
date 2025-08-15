@@ -43,7 +43,7 @@ export default function ContactPage() {
         <div className="absolute inset-0">
           <Image
             src="https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg?auto=compress&cs=tinysrgb&w=1920"
-            alt="Contact HuntingtonsBank"
+            alt="Contact HuntingtonBank"
             layout="fill"
             objectFit="cover"
             className="opacity-50"
@@ -135,8 +135,8 @@ export default function ContactPage() {
           {[
             {
               title: 'Email Us',
-              description: 'support@huntingtonsbank.com',
-              link: 'mailto:support@huntingtonsbank.com',
+              description: 'support@HuntingtonBank.com',
+              link: 'mailto:support@HuntingtonBank.com',
             },
             {
               title: 'Call Us',
@@ -173,7 +173,7 @@ export default function ContactPage() {
       {/* Footer */}
       <footer className="py-12 px-4 sm:px-6 lg:px-8 bg-blue-900 text-white text-center">
         <p className="text-sm sm:text-base">
-          © 2025 HuntingtonsBank. All rights reserved. Secure banking for a connected world.
+          © 2025 HuntingtonBank. All rights reserved. Secure banking for a connected world.
         </p>
       </footer>
     </main>

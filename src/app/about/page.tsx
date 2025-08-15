@@ -4,20 +4,20 @@ import Navbar from '../components/Navbar';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'About HuntingtonsBank - Global Banking Solutions',
+  title: 'About HuntingtonBank - Global Banking Solutions',
   description:
-    'Learn about HuntingtonsBank’s mission, values, and achievements in providing secure and innovative global banking solutions.',
+    'Learn about HuntingtonBank’s mission, values, and achievements in providing secure and innovative global banking solutions.',
   openGraph: {
-    title: 'About HuntingtonsBank',
-    description: 'Discover how HuntingtonsBank empowers global financial freedom with innovative banking solutions.',
-    url: 'https://your-huntingtonsbank-url.com/about',
-    siteName: 'HuntingtonsBank',
+    title: 'About HuntingtonBank',
+    description: 'Discover how HuntingtonBank empowers global financial freedom with innovative banking solutions.',
+    url: 'https://your-HuntingtonBank-url.com/about',
+    siteName: 'HuntingtonBank',
     images: [
       {
         url: 'https://images.pexels.com/photos/3184297/pexels-photo-3184297.jpeg?auto=compress&cs=tinysrgb&w=1920',
         width: 1200,
         height: 630,
-        alt: 'About HuntingtonsBank',
+        alt: 'About HuntingtonBank',
       },
     ],
     locale: 'en_US',
@@ -34,7 +34,7 @@ export default function AboutPage() {
         <div className="absolute inset-0">
           <Image
             src="https://images.pexels.com/photos/3184297/pexels-photo-3184297.jpeg?auto=compress&cs=tinysrgb&w=1920"
-            alt="About HuntingtonsBank"
+            alt="About HuntingtonBank"
             layout="fill"
             objectFit="cover"
             className="opacity-50"
@@ -43,7 +43,7 @@ export default function AboutPage() {
           <div className="absolute inset-0 bg-blue-900/60"></div>
         </div>
         <h1 className="relative text-4xl sm:text-5xl md:text-6xl font-bold mb-6 tracking-tight">
-          About HuntingtonsBank
+          About HuntingtonBank
         </h1>
         <p className="relative text-base sm:text-lg md:text-xl max-w-3xl leading-relaxed">
           Empowering global financial freedom with innovative, secure, and seamless banking solutions.
@@ -57,7 +57,7 @@ export default function AboutPage() {
         </h2>
         <div className="max-w-4xl mx-auto text-center">
           <p className="text-gray-600 text-sm sm:text-base leading-relaxed">
-            At HuntingtonsBank, our mission is to simplify global banking by providing secure, efficient, and accessible financial services to individuals and businesses worldwide. We strive to break down barriers in international finance, offering multi-currency accounts, competitive rates, and cutting-edge technology to empower our customers.
+            At HuntingtonBank, our mission is to simplify global banking by providing secure, efficient, and accessible financial services to individuals and businesses worldwide. We strive to break down barriers in international finance, offering multi-currency accounts, competitive rates, and cutting-edge technology to empower our customers.
           </p>
         </div>
       </section>
@@ -131,7 +131,7 @@ export default function AboutPage() {
       {/* CTA Section */}
       <section className="py-16 sm:py-20 px-4 sm:px-6 lg:px-8 bg-blue-900 text-white text-center">
         <h2 className="text-3xl sm:text-4xl font-bold mb-6">
-          Join HuntingtonsBank Today
+          Join HuntingtonBank Today
         </h2>
         <p className="text-base sm:text-lg max-w-3xl mx-auto mb-8">
           Experience global banking with ease and security. Sign up now to start managing your finances worldwide.
@@ -139,7 +139,7 @@ export default function AboutPage() {
         <Link
           href="/auth/register"
           className="bg-red-600 text-white px-6 py-3 sm:px-8 sm:py-4 rounded-full font-semibold text-base sm:text-lg shadow-lg hover:bg-red-700 hover:shadow-xl transition duration-300"
-          aria-label="Sign up for HuntingtonsBank"
+          aria-label="Sign up for HuntingtonBank"
         >
           Get Started
         </Link>
@@ -148,7 +148,7 @@ export default function AboutPage() {
       {/* Footer */}
       <footer className="py-12 px-4 sm:px-6 lg:px-8 bg-blue-900 text-white text-center">
         <p className="text-sm sm:text-base">
-          © 2025 HuntingtonsBank. All rights reserved. Secure banking for a connected world.
+          © 2025 HuntingtonBank. All rights reserved. Secure banking for a connected world.
         </p>
       </footer>
     </main>

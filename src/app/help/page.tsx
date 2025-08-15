@@ -4,20 +4,20 @@ import Navbar from '../components/Navbar';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Help Center - HuntingtonsBank Support',
+  title: 'Help Center - HuntingtonBank Support',
   description:
-    'Find answers to common questions or contact HuntingtonsBank’s support team for assistance with your banking needs.',
+    'Find answers to common questions or contact HuntingtonBank’s support team for assistance with your banking needs.',
   openGraph: {
-    title: 'HuntingtonsBank Help Center',
-    description: 'Get help with your HuntingtonsBank account through our FAQs or contact our support team.',
-    url: 'https://your-huntingtonsbank-url.com/help',
-    siteName: 'HuntingtonsBank',
+    title: 'HuntingtonBank Help Center',
+    description: 'Get help with your HuntingtonBank account through our FAQs or contact our support team.',
+    url: 'https://your-HuntingtonBank-url.com/help',
+    siteName: 'HuntingtonBank',
     images: [
       {
         url: 'https://images.pexels.com/photos/6694543/pexels-photo-6694543.jpeg?auto=compress&cs=tinysrgb&w=1920',
         width: 1200,
         height: 630,
-        alt: 'HuntingtonsBank Help Center',
+        alt: 'HuntingtonBank Help Center',
       },
     ],
     locale: 'en_US',
@@ -58,7 +58,7 @@ export default function HelpPage() {
         <div className="max-w-4xl mx-auto space-y-6">
           {[
             {
-              question: 'How do I open a HuntingtonsBank account?',
+              question: 'How do I open a HuntingtonBank account?',
               answer: 'You can open an account by clicking "Sign Up" on our homepage and following the registration process. It takes just a few minutes to get started.',
             },
             {
@@ -67,10 +67,10 @@ export default function HelpPage() {
             },
             {
               question: 'Are there any fees for international transfers?',
-              answer: 'HuntingtonsBank offers competitive rates with low or no fees for international transfers, depending on the currency and destination.',
+              answer: 'HuntingtonBank offers competitive rates with low or no fees for international transfers, depending on the currency and destination.',
             },
             {
-              question: 'How secure is my money with HuntingtonsBank?',
+              question: 'How secure is my money with HuntingtonBank?',
               answer: 'We partner with leading banks and use industry-leading encryption to ensure your funds and data are secure.',
             },
           ].map((faq, index) => (
@@ -100,7 +100,7 @@ export default function HelpPage() {
         <Link
           href="/contact"
           className="bg-red-600 text-white px-6 py-3 sm:px-8 sm:py-4 rounded-full font-semibold text-base sm:text-lg shadow-lg hover:bg-red-700 hover:shadow-xl transition duration-300"
-          aria-label="Contact HuntingtonsBank Support"
+          aria-label="Contact HuntingtonBank Support"
         >
           Contact Support
         </Link>
@@ -109,7 +109,7 @@ export default function HelpPage() {
       {/* Footer */}
       <footer className="py-12 px-4 sm:px-6 lg:px-8 bg-blue-900 text-white text-center">
         <p className="text-sm sm:text-base">
-          © 2025 HuntingtonsBank. All rights reserved. Secure banking for a connected world.
+          © 2025 HuntingtonBank. All rights reserved. Secure banking for a connected world.
         </p>
       </footer>
     </main>
