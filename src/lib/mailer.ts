@@ -12,7 +12,7 @@ const transporter = nodemailer.createTransport({
 
 export const sendOtpEmail = async (to: string, otp: string) => {
   const mailOptions = {
-    from: `"Banking App" <${process.env.EMAIL_USER}>`,
+    from: `"Huntingtos Bank" <${process.env.EMAIL_USER}>`,
     to,
     subject: 'Your OTP Code',
     html: `<p>Your OTP code is:</p><h2>${otp}</h2><p>This code expires in 10 minutes.</p>`,

@@ -43,17 +43,23 @@ model Transaction {
 
   user        User         @relation(fields: [userId], references: [id])
   userId      String
+  metadata    Json?
 }
 
 model Loan {
-  id          String     @id @default(uuid())
-  amount      Float
-  status      LoanStatus @default(PENDING)
-  createdAt   DateTime   @default(now())
+  id              String     @id @default(uuid())
+  amount          Float
+  purpose         String
+  durationMonths  Int
+  employmentStatus String
+  monthlyIncome   Float
+  status          LoanStatus @default(PENDING)
+  createdAt       DateTime   @default(now())
 
   user        User       @relation(fields: [userId], references: [id])
   userId      String
 }
+
 
 enum Role {
   ADMIN

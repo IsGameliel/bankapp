@@ -19,6 +19,7 @@ export async function GET(req: NextRequest) {
         status: true,
         description: true,
         createdAt: true,
+        metadata: true,
       },
     });
     return NextResponse.json({ success: true, transactions });

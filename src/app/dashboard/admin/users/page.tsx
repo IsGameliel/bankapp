@@ -1,4 +1,3 @@
-// /src/app/dashboard/admin/users/page.tsx
 'use client';
 import { useEffect, useState } from 'react';
 
@@ -102,85 +101,134 @@ export default function AdminUsersPage() {
   }
 
   return (
-    <div>
-      <h2 className="text-2xl text-[#0D1B2A] font-semibold mb-4">User Control</h2>
+    <div className="p-4 md:p-6 bg-[#F5F7FA] min-h-screen">
+      <h2 className="text-2xl font-bold text-[#0D1B2A] mb-6">👤 Customer Management</h2>
 
-      {/* Create form */}
-      <form onSubmit={handleCreate} className="bg-white text-[#0D1B2A] p-4 rounded shadow mb-6 grid grid-cols-1 md:grid-cols-6 gap-3">
-        <input value={form.name} onChange={e => setForm({...form, name: e.target.value})} placeholder="Name" className="p-2 border rounded md:col-span-1" />
-        <input value={form.email} onChange={e => setForm({...form, email: e.target.value})} placeholder="Email" className="p-2 border rounded md:col-span-1" />
-        <input value={form.password} onChange={e => setForm({...form, password: e.target.value})} placeholder="Password" type="password" className="p-2 border rounded md:col-span-1" />
-        <select value={form.accountType} onChange={e => setForm({...form, accountType: e.target.value})} className="p-2 border rounded md:col-span-1">
+      {/* Create Form */}
+      <form 
+        onSubmit={handleCreate} 
+        className="bg-white shadow-lg rounded-xl p-6 mb-8 grid grid-cols-1 md:grid-cols-6 gap-4 border"
+      >
+        <input 
+          value={form.name} 
+          onChange={e => setForm({...form, name: e.target.value})} 
+          placeholder="Full Name" 
+          className="p-3 border rounded-lg md:col-span-1 focus:ring-2 focus:ring-blue-500 outline-none"
+        />
+        <input 
+          value={form.email} 
+          onChange={e => setForm({...form, email: e.target.value})} 
+          placeholder="Email" 
+          className="p-3 border rounded-lg md:col-span-1 focus:ring-2 focus:ring-blue-500 outline-none"
+        />
+        <input 
+          value={form.password} 
+          onChange={e => setForm({...form, password: e.target.value})} 
+          placeholder="Password" 
+          type="password" 
+          className="p-3 border rounded-lg md:col-span-1 focus:ring-2 focus:ring-blue-500 outline-none"
+        />
+        <select 
+          value={form.accountType} 
+          onChange={e => setForm({...form, accountType: e.target.value})} 
+          className="p-3 border rounded-lg md:col-span-1 focus:ring-2 focus:ring-blue-500 outline-none"
+        >
           <option value="SAVINGS">SAVINGS</option>
           <option value="FIXED">FIXED</option>
           <option value="SALARY">SALARY</option>
           <option value="DEMAT">DEMAT</option>
         </select>
-        <input value={form.balance} onChange={e => setForm({...form, balance: Number(e.target.value)})} placeholder="Balance" type="number" className="p-2 border rounded md:col-span-1" />
-        <button disabled={creating} className="bg-blue-600 text-white px-4 py-2 rounded md:col-span-1">
+        <input 
+          value={form.balance} 
+          onChange={e => setForm({...form, balance: Number(e.target.value)})} 
+          placeholder="Initial Balance" 
+          type="number" 
+          className="p-3 border rounded-lg md:col-span-1 focus:ring-2 focus:ring-blue-500 outline-none"
+        />
+        <button 
+          disabled={creating} 
+          className="bg-blue-600 hover:bg-blue-700 transition text-white font-semibold px-4 py-2 rounded-lg md:col-span-1 shadow"
+        >
           {creating ? 'Creating...' : 'Create Customer'}
         </button>
       </form>
 
+      {/* Users Table */}
       {/* Users table */}
-      <div className="bg-white p-4 rounded shadow">
-        {loading ? <p className="text-[#0D1B2A]">Loading users...</p> : (
-          <table className="w-full table-auto text-[#0D1B2A]">
-            <thead className="text-left">
-              <tr>
-                <th className="p-2">Name</th>
-                <th className="p-2">Email</th>
-                <th className="p-2">Account#</th>
-                <th className="p-2">Balance</th>
-                <th className="p-2">Status</th>
-                <th className="p-2">Account Type</th>
-                <th className="p-2">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {users.map(u => (
-                <tr key={u.id} className="border-t">
-                  <td className="p-2">{u.name}</td>
-                  <td className="p-2">{u.email}</td>
-                  <td className="p-2">{u.accountNumber}</td>
-                  <td className="p-2">{u.balance?.toFixed(2)}</td>
-                  <td className="p-2">{(u as any).status ?? 'ACTIVE'}</td>
-                  <td className="p-2">{u.accountType}</td>
-                  <td className="p-2">
-                    <button onClick={() => startEdit(u)} className="text-sm bg-gray-200 px-2 py-1 rounded mr-2">Edit</button>
-                    <button onClick={() => handleDelete(u.id)} className="text-sm bg-red-500 text-white px-2 py-1 rounded">Delete</button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
-      </div>
+<div className="bg-white p-4 rounded shadow overflow-x-auto">
+  {loading ? (
+    <p className="text-[#0D1B2A]">Loading users...</p>
+  ) : (
+    <table className="w-full min-w-[700px] text-[#0D1B2A] text-sm md:text-base">
+      <thead className="bg-gray-100 text-left">
+        <tr>
+          <th className="p-2">Name</th>
+          <th className="p-2">Email</th>
+          <th className="p-2">Account#</th>
+          <th className="p-2">Balance</th>
+          <th className="p-2">Status</th>
+          <th className="p-2">Account Type</th>
+          <th className="p-2">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {users.map((u) => (
+          <tr
+            key={u.id}
+            className="border-t hover:bg-gray-50 transition-colors"
+          >
+            <td className="p-2">{u.name}</td>
+            <td className="p-2 break-words max-w-[150px]">{u.email}</td>
+            <td className="p-2">{u.accountNumber}</td>
+            <td className="p-2">{u.balance?.toFixed(2)}</td>
+            <td className="p-2">{(u as any).status ?? "ACTIVE"}</td>
+            <td className="p-2">{u.accountType}</td>
+            <td className="p-2 flex flex-wrap gap-2">
+              <button
+                onClick={() => startEdit(u)}
+                className="text-sm bg-gray-200 px-3 py-1 rounded hover:bg-gray-300"
+              >
+                Edit
+              </button>
+              <button
+                onClick={() => handleDelete(u.id)}
+                className="text-sm bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
+              >
+                Delete
+              </button>
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  )}
+</div>
 
-      {/* Edit modal / inline form */}
+
+      {/* Edit Modal */}
       {editingId && (
-        <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded w-full max-w-lg">
-            <h3 className="text-lg font-semibold mb-4">Edit Customer</h3>
-            <form onSubmit={submitEdit} className="grid grid-cols-1 gap-3">
-              <input value={editForm.name} onChange={e => setEditForm({...editForm, name: e.target.value})} className="p-2 border rounded" />
-              <input value={editForm.email} onChange={e => setEditForm({...editForm, email: e.target.value})} className="p-2 border rounded" />
-              <input type="number" value={editForm.balance} onChange={e => setEditForm({...editForm, balance: Number(e.target.value)})} className="p-2 border rounded" />
-              <select value={editForm.status} onChange={e => setEditForm({...editForm, status: e.target.value})} className="p-2 border rounded">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white p-6 rounded-xl shadow-xl w-full max-w-lg">
+            <h3 className="text-lg font-semibold mb-4 text-[#0D1B2A]">✏️ Edit Customer</h3>
+            <form onSubmit={submitEdit} className="grid grid-cols-1 gap-4">
+              <input value={editForm.name} onChange={e => setEditForm({...editForm, name: e.target.value})} className="p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" />
+              <input value={editForm.email} onChange={e => setEditForm({...editForm, email: e.target.value})} className="p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" />
+              <input type="number" value={editForm.balance} onChange={e => setEditForm({...editForm, balance: Number(e.target.value)})} className="p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" />
+              <select value={editForm.status} onChange={e => setEditForm({...editForm, status: e.target.value})} className="p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
                 <option value="ACTIVE">ACTIVE</option>
                 <option value="SUSPENDED">SUSPENDED</option>
                 <option value="CLOSED">CLOSED</option>
               </select>
-              <select value={editForm.accountType} onChange={e => setEditForm({...editForm, accountType: e.target.value})} className="p-2 border rounded">
+              <select value={editForm.accountType} onChange={e => setEditForm({...editForm, accountType: e.target.value})} className="p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
                 <option value="SAVINGS">SAVINGS</option>
                 <option value="FIXED">FIXED</option>
                 <option value="SALARY">SALARY</option>
                 <option value="DEMAT">DEMAT</option>
               </select>
 
-              <div className="flex justify-end gap-2">
-                <button type="button" onClick={() => setEditingId(null)} className="px-4 py-2 border rounded">Cancel</button>
-                <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded">Save</button>
+              <div className="flex justify-end gap-3 mt-2">
+                <button type="button" onClick={() => setEditingId(null)} className="px-4 py-2 border rounded-lg hover:bg-gray-100">Cancel</button>
+                <button type="submit" className="px-4 py-2 bg-blue-600 hover:bg-blue-700 transition text-white rounded-lg">Save</button>
               </div>
             </form>
           </div>

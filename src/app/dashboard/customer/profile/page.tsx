@@ -9,6 +9,8 @@ export default function ProfilePage() {
     accountNumber?: string;
     accountType?: string;
     profilePicture?: string;
+    balance?: number;
+    tier?: string;
   } | null>(null);
   const [showEdit, setShowEdit] = useState(false);
   const [editName, setEditName] = useState("");
@@ -31,21 +33,22 @@ export default function ProfilePage() {
     fetchUser();
   }, []);
 
-  // Open edit modal and set initial values
   const openEditProfile = () => {
     setEditName(user?.name || "");
     setEditProfilePicture(user?.profilePicture || "");
     setShowEdit(true);
   };
 
-  // Handle profile update (calls API)
   const handleProfileUpdate = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       const res = await fetch("/api/user/update", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: editName, profilePicture: editProfilePicture }),
+        body: JSON.stringify({
+          name: editName,
+          profilePicture: editProfilePicture,
+        }),
       });
       const data = await res.json();
       if (data.success) {
@@ -59,7 +62,6 @@ export default function ProfilePage() {
     }
   };
 
-  // Handle file input change for profile picture
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -80,45 +82,66 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="bg-white p-6 rounded-xl shadow-md max-w-lg relative">
-      <h1 className="text-2xl font-bold text-[#0D1B2A] mb-4">Profile Information</h1>
-      <div className="flex flex-col items-center mb-6">
-        <div className="w-28 h-28 rounded-full bg-gray-200 overflow-hidden mb-2 border-4 border-[#0D1B2A]">
-          {user?.profilePicture ? (
-            <img src={user.profilePicture} alt="Profile" className="w-full h-full object-cover" />
-          ) : (
-            <svg className="w-full h-full text-gray-400" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5zm0 2c-3.3 0-10 1.7-10 5v3h20v-3c0-3.3-6.7-5-10-5z" />
-            </svg>
-          )}
+    <div className="max-w-3xl mx-auto px-4 py-8">
+      {/* Header Card */}
+      <div className="bg-gradient-to-r from-blue-700 to-blue-500 text-white rounded-2xl p-6 shadow-lg flex items-center justify-between mb-6">
+        <div className="flex items-center gap-4">
+          <div className="w-20 h-20 rounded-full bg-white overflow-hidden border-4 border-white shadow">
+            {user?.profilePicture ? (
+              <img
+                src={user.profilePicture}
+                alt="Profile"
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <svg
+                className="w-full h-full text-gray-400"
+                fill="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5zm0 2c-3.3 0-10 1.7-10 5v3h20v-3c0-3.3-6.7-5-10-5z" />
+              </svg>
+            )}
+          </div>
+          <div>
+            <h1 className="text-2xl font-bold">{user?.name || "N/A"}</h1>
+            <p className="text-sm opacity-80">{user?.email}</p>
+            <span className="inline-block mt-1 text-xs bg-white text-blue-700 px-3 py-1 rounded-full font-semibold">
+              {user?.tier || "Standard"}
+            </span>
+          </div>
         </div>
         <button
           onClick={openEditProfile}
-          className="mt-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+          className="bg-white text-blue-700 px-4 py-2 rounded-lg font-semibold shadow hover:bg-gray-100 transition"
         >
-          Edit Profile
+          Edit
         </button>
       </div>
-      <div className="space-y-3">
-        <div>
-          <span className="font-semibold text-gray-700">Full Name:</span>
-          <p className="text-gray-600">{user?.name || 'N/A'}</p>
+
+      {/* Account Info */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="bg-white rounded-xl shadow p-4">
+          <h2 className="text-sm font-semibold text-gray-500">Account Number</h2>
+          <p className="text-lg font-bold text-gray-800">
+            {user?.accountNumber || "Not Available"}
+          </p>
         </div>
-        <div>
-          <span className="font-semibold text-gray-700">Email:</span>
-          <p className="text-gray-600">{user?.email || 'N/A'}</p>
+        <div className="bg-white rounded-xl shadow p-4">
+          <h2 className="text-sm font-semibold text-gray-500">Account Type</h2>
+          <p className="text-lg font-bold text-gray-800">
+            {user?.accountType || "Not Available"}
+          </p>
         </div>
-        <div>
-          <span className="font-semibold text-gray-700">Account Number:</span>
-          <p className="text-gray-600">{user?.accountNumber || 'Not Available'}</p>
-        </div>
-        <div>
-          <span className="font-semibold text-gray-700">Account Type:</span>
-          <p className="text-gray-600">{user?.accountType || 'Not Available'}</p>
+        <div className="bg-white rounded-xl shadow p-4 col-span-1 md:col-span-2">
+          <h2 className="text-sm font-semibold text-gray-500">Balance</h2>
+          <p className="text-2xl font-bold text-green-600">
+            ₦{user?.balance?.toLocaleString() || "0.00"}
+          </p>
         </div>
       </div>
 
-      {/* Edit Profile Modal */}
+      {/* Edit Modal */}
       {showEdit && (
         <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
           <div className="bg-white p-8 rounded-xl shadow-lg w-full max-w-md relative">
@@ -133,9 +156,17 @@ export default function ProfilePage() {
               <div className="flex flex-col items-center">
                 <div className="w-24 h-24 rounded-full bg-gray-200 overflow-hidden mb-2 border-2 border-[#0D1B2A]">
                   {editProfilePicture ? (
-                    <img src={editProfilePicture} alt="Profile Preview" className="w-full h-full object-cover" />
+                    <img
+                      src={editProfilePicture}
+                      alt="Profile Preview"
+                      className="w-full h-full object-cover"
+                    />
                   ) : (
-                    <svg className="w-full h-full text-gray-400" fill="currentColor" viewBox="0 0 24 24">
+                    <svg
+                      className="w-full h-full text-gray-400"
+                      fill="currentColor"
+                      viewBox="0 0 24 24"
+                    >
                       <path d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5zm0 2c-3.3 0-10 1.7-10 5v3h20v-3c0-3.3-6.7-5-10-5z" />
                     </svg>
                   )}
@@ -161,7 +192,7 @@ export default function ProfilePage() {
                   type="text"
                   className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                   value={editName}
-                  onChange={e => setEditName(e.target.value)}
+                  onChange={(e) => setEditName(e.target.value)}
                   required
                 />
               </div>
