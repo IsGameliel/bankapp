@@ -11,12 +11,32 @@ export default function TransactionsPage() {
   useEffect(() => {
     async function fetchTransactions() {
       try {
-        const res = await fetch("/api/user/transactions");
+        const token = localStorage.getItem("token");
+        if (!token) {
+          setError("You need to be logged in to view transactions.");
+          setLoading(false);
+          return;
+        }
+
+        const res = await fetch("/api/user/transactions", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ token }),
+        });
+
+        if (!res.ok) {
+          throw new Error(`HTTP error! Status: ${res.status} ${res.statusText}`);
+        }
+
         const data = await res.json();
-        if (data.success) setTransactions(data.transactions);
-        else setError(data.message || "Failed to fetch transactions");
-      } catch {
-        setError("Failed to fetch transactions");
+        if (data.success) {
+          setTransactions(data.transactions);
+        } else {
+          setError(data.message || "Failed to fetch transactions");
+        }
+      } catch (err: any) {
+        setError(err.message || "Failed to fetch transactions");
+        console.error("Fetch Transactions Error:", err);
       } finally {
         setLoading(false);
       }
@@ -66,15 +86,12 @@ export default function TransactionsPage() {
                   </td>
                   <td className="py-3 px-4">{tx.description || "-"}</td>
                   <td
-                      className={`py-3 px-4 font-semibold ${
-                        tx.type === "DEPOSIT"
-                          ? "text-green-600"
-                          : "text-red-600"
-                      }`}
-                    >
-                      {tx.type === "DEPOSIT" ? "+" : "-"}${tx.amount}
-                    </td>
-
+                    className={`py-3 px-4 font-semibold ${
+                      tx.type === "DEPOSIT" ? "text-green-600" : "text-red-600"
+                    }`}
+                  >
+                    {tx.type === "DEPOSIT" ? "+" : "-"}${tx.amount.toLocaleString()}
+                  </td>
                   <td className="py-3 px-4">
                     <span className="px-2 py-1 rounded-full text-xs bg-gray-100">
                       {tx.type}
@@ -108,7 +125,6 @@ export default function TransactionsPage() {
         </div>
       )}
 
-      {/* Receipt Modal */}
       {selectedTx && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-xl shadow-lg max-w-md w-full p-6 relative">
@@ -130,7 +146,7 @@ export default function TransactionsPage() {
               <p>
                 <strong>Amount:</strong>{" "}
                 <span className="text-blue-700 font-semibold">
-                  ${selectedTx.amount}
+                  ${selectedTx.amount.toLocaleString()}
                 </span>
               </p>
               <p>
@@ -157,36 +173,33 @@ export default function TransactionsPage() {
                 </h3>
                 <div className="space-y-1 text-sm text-gray-700">
                   <p>
-                    <strong>Bank Name:</strong>{" "}
-                    {selectedTx.metadata.bankName}
+                    <strong>Bank Name:</strong> {selectedTx.metadata.bankName || "-"}
                   </p>
                   <p>
                     <strong>Account Number:</strong>{" "}
-                    {selectedTx.metadata.accountNumber}
+                    {selectedTx.metadata.accountNumber || "-"}
                   </p>
                   <p>
                     <strong>Account Name:</strong>{" "}
-                    {selectedTx.metadata.accountName}
+                    {selectedTx.metadata.accountName || "-"}
                   </p>
                   <p>
                     <strong>Routing Number:</strong>{" "}
-                    {selectedTx.metadata.routingNumber}
+                    {selectedTx.metadata.routingNumber || "-"}
                   </p>
                   <p>
-                    <strong>SWIFT Code:</strong>{" "}
-                    {selectedTx.metadata.swiftCode}
+                    <strong>SWIFT Code:</strong> {selectedTx.metadata.swiftCode || "-"}
                   </p>
                   <p>
                     <strong>Bank Address:</strong>{" "}
-                    {selectedTx.metadata.bankAddress}
+                    {selectedTx.metadata.bankAddress || "-"}
                   </p>
                   <p>
                     <strong>House Address:</strong>{" "}
-                    {selectedTx.metadata.houseAddress}
+                    {selectedTx.metadata.houseAddress || "-"}
                   </p>
                   <p>
-                    <strong>Zip Code:</strong>{" "}
-                    {selectedTx.metadata.zipCode}
+                    <strong>Zip Code:</strong> {selectedTx.metadata.zipCode || "-"}
                   </p>
                 </div>
               </div>

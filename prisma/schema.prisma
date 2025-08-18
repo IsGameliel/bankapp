@@ -15,51 +15,72 @@ datasource db {
 }
 
 model User {
-  id             String       @id @default(uuid())
-  email          String       @unique
-  password       String
-  name           String?
-  accountNumber  String?      @unique
-  accountType    AccountType? @default(SAVINGS)
-  role           Role         @default(CUSTOMER)
-  otp            String?
-  otpExpires     DateTime?
-  profilePicture String?
-  balance        Float        @default(0.0)
-  status         UserStatus   @default(ACTIVE)
-  createdAt      DateTime     @default(now())
-
-  transactions   Transaction[]
-  loans          Loan[]
+  id                 String        @id @default(uuid())
+  email              String        @unique
+  password           String
+  name               String?
+  accountNumber      String?       @unique
+  accountType        AccountType?  @default(SAVINGS)
+  role               Role          @default(CUSTOMER)
+  otp                String?
+  otpExpires         DateTime?
+  profilePicture     String?
+  balance            Float         @default(0.0)
+  status             UserStatus    @default(ACTIVE)
+  createdAt          DateTime      @default(now())
+  transactionPin     String?
+  transferOtp        String?
+  transferOtpExpires DateTime?
+  transactions       Transaction[]
+  loans              Loan[]
+  transfers          Transfer[]
 }
 
 model Transaction {
-  id          String       @id @default(uuid())
+  id          String            @id @default(uuid())
   amount      Float
   type        TransactionType
   description String?
-  status TransactionStatus @default(PENDING)
-  createdAt   DateTime     @default(now())
+  status      TransactionStatus @default(PENDING)
+  createdAt   DateTime          @default(now())
 
-  user        User         @relation(fields: [userId], references: [id])
-  userId      String
-  metadata    Json?
+  user     User   @relation(fields: [userId], references: [id])
+  userId   String
+  metadata Json?
 }
 
 model Loan {
-  id              String     @id @default(uuid())
-  amount          Float
-  purpose         String
-  durationMonths  Int
+  id               String     @id @default(uuid())
+  amount           Float
+  purpose          String
+  durationMonths   Int
   employmentStatus String
-  monthlyIncome   Float
-  status          LoanStatus @default(PENDING)
-  createdAt       DateTime   @default(now())
+  monthlyIncome    Float
+  status           LoanStatus @default(PENDING)
+  createdAt        DateTime   @default(now())
 
-  user        User       @relation(fields: [userId], references: [id])
-  userId      String
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
 }
 
+model Transfer {
+  id            String   @id @default(cuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id])
+  amount        Float
+  bankName      String
+  accountNumber String
+  accountName   String
+  routingNumber String?
+  swiftCode     String?
+  bankAddress   String?
+  houseAddress  String?
+  zipCode       String?
+  otp           String?
+  otpExpires    DateTime? 
+  status        String // "PENDING" | "COMPLETED" | "FAILED"
+  createdAt     DateTime @default(now())
+}
 
 enum Role {
   ADMIN

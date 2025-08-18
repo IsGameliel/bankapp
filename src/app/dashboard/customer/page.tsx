@@ -3,25 +3,57 @@
 import { useEffect, useState } from "react";
 
 export default function CustomerDashboard() {
-  const [user, setUser] = useState<{ name: string; balance?: number } | null>(
-    null
-  );
+  const [user, setUser] = useState<{ name: string; balance?: number } | null>(null);
   const [transactions, setTransactions] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     async function fetchUserAndTransactions() {
       try {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          setError("You need to be logged in to view the dashboard.");
+          setLoading(false);
+          return;
+        }
+
         const [userRes, txRes] = await Promise.all([
-          fetch("/api/user"),
-          fetch("/api/user/transactions"),
+          fetch("/api/user", {
+            method: "GET",
+            credentials: "include", // Include cookies in the request
+          }),
+          fetch("/api/user/transactions", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ token }),
+          }),
         ]);
+
+        if (!userRes.ok) {
+          throw new Error(`Failed to fetch user data: ${userRes.status} ${userRes.statusText}`);
+        }
+        if (!txRes.ok) {
+          throw new Error(`Failed to fetch transactions: ${txRes.status} ${txRes.statusText}`);
+        }
+
         const userData = await userRes.json();
         const txData = await txRes.json();
-        if (userData.success) setUser(userData.user);
-        if (txData.success) setTransactions(txData.transactions);
-      } catch (err) {
-        // handle error
+
+        if (userData.success) {
+          setUser(userData.user);
+        } else {
+          setError(userData.message || "Failed to fetch user data");
+        }
+
+        if (txData.success) {
+          setTransactions(txData.transactions);
+        } else {
+          setError(txData.message || "Failed to fetch transactions");
+        }
+      } catch (err: any) {
+        setError(err.message || "Something went wrong while loading the dashboard");
+        console.error("Dashboard Fetch Error:", err);
       } finally {
         setLoading(false);
       }
@@ -33,6 +65,14 @@ export default function CustomerDashboard() {
     return (
       <div className="flex items-center justify-center min-h-screen bg-gray-100 text-lg text-gray-600">
         Loading dashboard...
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-gray-100 text-lg text-red-600">
+        {error}
       </div>
     );
   }
@@ -93,9 +133,17 @@ export default function CustomerDashboard() {
 
         {/* Recent Transactions */}
         <div className="mt-8 bg-white p-6 rounded-2xl shadow-md">
-          <h3 className="text-lg font-semibold text-gray-700 mb-4">
-            Recent Transactions
-          </h3>
+          <div className="flex justify-between items-center mb-4">
+            <h3 className="text-lg font-semibold text-gray-700">
+              Recent Transactions
+            </h3>
+            <a
+              href="/dashboard/customer/transactions"
+              className="text-blue-600 text-sm hover:underline"
+            >
+              View All
+            </a>
+          </div>
           {transactions.length > 0 ? (
             <ul className="divide-y divide-gray-200">
               {transactions.slice(0, 5).map((tx) => (
@@ -111,9 +159,11 @@ export default function CustomerDashboard() {
                       {new Date(tx.createdAt).toLocaleDateString()} •{" "}
                       <span
                         className={`${
-                          tx.status === "COMPLETED"
+                          tx.status === "SUCCESS"
                             ? "text-green-600"
-                            : "text-yellow-600"
+                            : tx.status === "PENDING"
+                            ? "text-yellow-600"
+                            : "text-red-600"
                         }`}
                       >
                         {tx.status}
@@ -122,13 +172,10 @@ export default function CustomerDashboard() {
                   </div>
                   <p
                     className={`font-semibold ${
-                      tx.type === "DEPOSIT"
-                        ? "text-green-600"
-                        : "text-red-600"
+                      tx.type === "DEPOSIT" ? "text-green-600" : "text-red-600"
                     }`}
                   >
-                    {tx.type === "DEPOSIT" ? "+" : "-"}$
-                    {tx.amount.toLocaleString()}
+                    {tx.type === "DEPOSIT" ? "+" : "-"}${tx.amount.toLocaleString()}
                   </p>
                 </li>
               ))}

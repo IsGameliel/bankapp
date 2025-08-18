@@ -4,19 +4,26 @@ import { useEffect, useState, useRef } from "react";
 
 export default function ProfilePage() {
   const [user, setUser] = useState<{
-    name: string;
-    email: string;
+    name?: string;
+    email?: string;
     accountNumber?: string;
     accountType?: string;
     profilePicture?: string;
     balance?: number;
     tier?: string;
+    transactionPin?: string;
   } | null>(null);
   const [showEdit, setShowEdit] = useState(false);
   const [editName, setEditName] = useState("");
   const [editProfilePicture, setEditProfilePicture] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [loading, setLoading] = useState(true);
+
+  // PIN state
+  const [pin, setPin] = useState("");
+  const [otp, setOtp] = useState("");
+  const [pinStep, setPinStep] = useState<"enter-pin" | "enter-otp">("enter-pin");
+  const [pinLoading, setPinLoading] = useState(false);
 
   useEffect(() => {
     async function fetchUser() {
@@ -25,7 +32,7 @@ export default function ProfilePage() {
         const data = await res.json();
         if (data.success) setUser(data.user);
       } catch (err) {
-        // handle error
+        console.error("Fetch user error:", err);
       } finally {
         setLoading(false);
       }
@@ -70,6 +77,57 @@ export default function ProfilePage() {
         setEditProfilePicture(reader.result as string);
       };
       reader.readAsDataURL(file);
+    }
+  };
+
+  const handleSetPin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setPinLoading(true);
+    try {
+      // Retrieve token from localStorage
+      const token = localStorage.getItem("token");
+      if (!token) {
+        alert("You need to be logged in to set a PIN");
+        setPinLoading(false);
+        return;
+      }
+
+      if (pinStep === "enter-pin") {
+        // Step 1: Send PIN request with token
+        const res = await fetch("/api/user/pin/initiate", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ pin, token }),
+        });
+        const data = await res.json();
+        if (data.success) {
+          alert("OTP sent to your email. Enter it to confirm.");
+          setPinStep("enter-otp");
+        } else {
+          alert(data.message || "Failed to set PIN");
+        }
+      } else {
+        // Step 2: Verify OTP with token
+        const res = await fetch("/api/user/pin/verify", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ pin, otp, token }),
+        });
+        const data = await res.json();
+        if (data.success) {
+          alert("Transaction PIN set successfully!");
+          setUser({ ...user, transactionPin: pin });
+          setPin("");
+          setOtp("");
+          setPinStep("enter-pin");
+        } else {
+          alert(data.message || "Invalid OTP");
+        }
+      }
+    } catch (err) {
+      alert("Failed to process request");
+    } finally {
+      setPinLoading(false);
     }
   };
 
@@ -120,7 +178,7 @@ export default function ProfilePage() {
       </div>
 
       {/* Account Info */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
         <div className="bg-white rounded-xl shadow p-4">
           <h2 className="text-sm font-semibold text-gray-500">Account Number</h2>
           <p className="text-lg font-bold text-gray-800">
@@ -136,10 +194,59 @@ export default function ProfilePage() {
         <div className="bg-white rounded-xl shadow p-4 col-span-1 md:col-span-2">
           <h2 className="text-sm font-semibold text-gray-500">Balance</h2>
           <p className="text-2xl font-bold text-green-600">
-            ₦{user?.balance?.toLocaleString() || "0.00"}
+            ${user?.balance?.toLocaleString() || "0.00"}
           </p>
         </div>
       </div>
+
+      {/* Transaction PIN Section */}
+      {!user?.transactionPin && (
+        <div className="bg-white rounded-xl shadow p-6 mb-6">
+          <h2 className="text-lg font-semibold mb-4 text-gray-700">
+            Set Your Transaction PIN
+          </h2>
+          <form onSubmit={handleSetPin} className="space-y-4">
+            {pinStep === "enter-pin" ? (
+              <div>
+                <label className="block text-gray-700 mb-1">
+                  4-digit PIN
+                </label>
+                <input
+                  type="password"
+                  maxLength={4}
+                  className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  value={pin}
+                  onChange={(e) => setPin(e.target.value.replace(/\D/g, ""))}
+                  required
+                />
+              </div>
+            ) : (
+              <div>
+                <label className="block text-gray-700 mb-1">Enter OTP</label>
+                <input
+                  type="text"
+                  maxLength={6}
+                  className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  value={otp}
+                  onChange={(e) => setOtp(e.target.value.replace(/\D/g, ""))}
+                  required
+                />
+              </div>
+            )}
+            <button
+              type="submit"
+              disabled={pinLoading}
+              className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition"
+            >
+              {pinLoading
+                ? "Processing..."
+                : pinStep === "enter-pin"
+                ? "Set PIN"
+                : "Verify OTP"}
+            </button>
+          </form>
+        </div>
+      )}
 
       {/* Edit Modal */}
       {showEdit && (
