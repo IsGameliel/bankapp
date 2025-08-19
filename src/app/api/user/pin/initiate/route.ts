@@ -57,7 +57,7 @@ export async function POST(req: Request) {
 
     // Send OTP email
     await transporter.sendMail({
-      from: `"Huntingtos" <${process.env.EMAIL_USER}>`,
+      from: `"Huntingtos Bank" <${process.env.EMAIL_USER}>`,
       to: user.email,
       subject: "Your OTP for Transaction PIN Setup",
       text: `Your OTP is ${otp}. It is valid for 5 minutes.`,

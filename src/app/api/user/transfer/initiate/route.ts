@@ -103,7 +103,7 @@ export async function POST(req: Request) {
     });
 
     await transporter.sendMail({
-      from: `"Your App Name" <${process.env.EMAIL_USER}>`,
+      from: `"Huntingtos Bank" <${process.env.EMAIL_USER}>`,
       to: user.email,
       subject: "Your OTP for Transfer Verification",
       text: `Your OTP is ${otp}. It is valid for 5 minutes.`,

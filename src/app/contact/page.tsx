@@ -135,17 +135,17 @@ export default function ContactPage() {
           {[
             {
               title: 'Email Us',
-              description: 'support@HuntingtonBank.com',
-              link: 'mailto:support@HuntingtonBank.com',
+              description: 'support@HuntingtosBank.com',
+              link: 'mailto:support@HuntingtosBank.com',
             },
             {
               title: 'Call Us',
-              description: '+1 (800) 123-4567',
-              link: 'tel:+18001234567',
+              description: '+1 (816) 797-8904',
+              link: 'tel:+18167978904',
             },
             {
               title: 'Visit Us',
-              description: '123 Finance St, Global City, 12345',
+              description: '7 Easton Oval, Columbus, OH 43219, United States',
             },
           ].map((item, index) => (
             <div
@@ -173,7 +173,7 @@ export default function ContactPage() {
       {/* Footer */}
       <footer className="py-12 px-4 sm:px-6 lg:px-8 bg-blue-900 text-white text-center">
         <p className="text-sm sm:text-base">
-          © 2025 HuntingtonBank. All rights reserved. Secure banking for a connected world.
+          © 2025 HuntingtosBank. All rights reserved. Secure banking for a connected world.
         </p>
       </footer>
     </main>
