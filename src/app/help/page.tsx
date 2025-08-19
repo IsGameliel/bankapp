@@ -27,7 +27,7 @@ export const metadata: Metadata = {
 
 export default function HelpPage() {
   return (
-    <main className="bg-gray-100 text-gray-900 pt-16">
+    <main className="bg-gray-100 text-gray-900">
       <Navbar />
       {/* Hero Section */}
       <section className="relative min-h-[50vh] flex flex-col items-center justify-center text-center px-4 sm:px-6 lg:px-8 bg-blue-900 text-white">

@@ -22,7 +22,7 @@ export default function HomePage() {
   }
 
   return (
-    <main className="min-h-screen bg-gray-100 text-gray-900 pt-16">
+    <main className="min-h-screen bg-gray-100 text-gray-900">
       <Navbar />
       {/* Hero Section */}
       <section className="relative min-h-screen flex flex-col items-center justify-center text-center px-4 sm:px-6 lg:px-8 bg-blue-900 text-white overflow-hidden">

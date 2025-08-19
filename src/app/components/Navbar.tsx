@@ -9,12 +9,12 @@ export default function Navbar() {
   const toggleMenu = () => setIsOpen(!isOpen);
 
   return (
-    <nav className="bg-blue-900 text-white fixed w-full z-50">
+    <nav className="bg-blue-900 text-white w-full z-10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center">
             <Link href="/" className="text-2xl font-bold">
-              HuntingtonBank
+              HuntingtosBank
             </Link>
           </div>
           <div className="hidden md:flex space-x-8">
