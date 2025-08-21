@@ -28,7 +28,7 @@ export const metadata: Metadata = {
         url: 'https://images.pexels.com/photos/6802048/pexels-photo-6802048.jpeg?auto=compress&cs=tinysrgb&w=1920',
         width: 1200,
         height: 630,
-        alt: 'HuntingtonsBank Global Banking',
+        alt: 'HuntingtonBank Global Banking',
       },
     ],
     locale: 'en_US',

@@ -80,6 +80,7 @@ model Transfer {
   otpExpires    DateTime? 
   status        String // "PENDING" | "COMPLETED" | "FAILED"
   createdAt     DateTime @default(now())
+  scheduledAt   DateTime?
 }
 
 enum Role {

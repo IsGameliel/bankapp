@@ -6,6 +6,7 @@ export const adminIcons = {
   Users: FaUsers,
   Loans: FaHandHoldingUsd,
   Transactions: FaListAlt,
+  Transfer: FaExchangeAlt,
 };
 
 export const customerIcons = {

@@ -9,6 +9,7 @@ import { adminIcons } from '../icons';
 const adminLinks = [
   { href: '/dashboard/admin', label: 'Overview', icon: adminIcons.Overview },
   { href: '/dashboard/admin/users', label: 'Users', icon: adminIcons.Users },
+  { href: '/dashboard/admin/transfer', label: 'Transfer', icon: adminIcons.Transfer },
   { href: '/dashboard/admin/loans', label: 'Loans', icon: adminIcons.Loans },
   { href: '/dashboard/admin/transactions', label: 'Transactions', icon: adminIcons.Transactions },
 ];
