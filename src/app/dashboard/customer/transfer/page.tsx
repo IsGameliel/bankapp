@@ -214,32 +214,47 @@ export default function TransferPage() {
               />
             </label>
             <div className="grid grid-cols-2 gap-3">
-              <input
-                name="routingNumber"
-                placeholder="Routing No."
-                className="p-3 border border-gray-300 rounded-xl bg-gray-50"
-              />
-              <input
-                name="swiftCode"
-                placeholder="SWIFT Code"
-                className="p-3 border border-gray-300 rounded-xl bg-gray-50"
-              />
+              <label className="block">
+                <span className="text-gray-800 font-medium">Routing No.</span>
+                <input
+                  name="routingNumber"
+                  placeholder="Routing No."
+                  className="mt-1 w-full p-3 border border-gray-300 rounded-xl bg-gray-50"
+                />
+              </label>
+              <label className="block">
+                <span className="text-gray-800 font-medium">SWIFT Code</span>
+                <input
+                  name="swiftCode"
+                  placeholder="SWIFT Code"
+                  className="mt-1 w-full p-3 border border-gray-300 rounded-xl bg-gray-50"
+                />
+              </label>
             </div>
-            <input
-              name="bankAddress"
-              placeholder="Bank Address"
-              className="w-full p-3 border border-gray-300 rounded-xl bg-gray-50"
-            />
-            <input
-              name="houseAddress"
-              placeholder="House Address"
-              className="w-full p-3 border border-gray-300 rounded-xl bg-gray-50"
-            />
-            <input
-              name="zipCode"
-              placeholder="Zip Code"
-              className="w-full p-3 border border-gray-300 rounded-xl bg-gray-50"
-            />
+            <label className="block">
+              <span className="text-gray-800 font-medium">Bank Address</span>
+              <input
+                name="bankAddress"
+                placeholder="Bank Address"
+                className="mt-1 w-full p-3 border border-gray-300 rounded-xl bg-gray-50"
+              />
+            </label>
+            <label className="block">
+              <span className="text-gray-800 font-medium">Home Address</span>
+              <input
+                name="houseAddress"
+                placeholder="House Address"
+                className="mt-1 w-full p-3 border border-gray-300 rounded-xl bg-gray-50"
+              />
+            </label>
+            <label className="block">
+              <span className="text-gray-800 font-medium">Zip Code</span>
+              <input
+                name="zipCode"
+                placeholder="Zip Code"
+                className="mt-1 w-full p-3 border border-gray-300 rounded-xl bg-gray-50"
+              />
+            </label>
             <button
               type="submit"
               disabled={loading}
